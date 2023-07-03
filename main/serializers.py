@@ -58,6 +58,7 @@ class MedicoSerializer(serializers.ModelSerializer):
         return medico
 
 class ProntuarioSerializer(serializers.ModelSerializer):
+    paciente = PacienteSerializer()	
     class Meta:
         model = Prontuario
         fields = ('id','paciente','birthday','sex', 'address', 'city', 'state', 'zip_code', 'description', 'allergies','medico')
