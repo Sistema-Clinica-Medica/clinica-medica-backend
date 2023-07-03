@@ -23,7 +23,8 @@ class ProntuarioList(generics.ListCreateAPIView):
     serializer_class = ProntuarioSerializer
     def get_serializer_context(self):
         context = super().get_serializer_context()
-        context['medico'] = Medico.objects.get(user = self.request.user)
+        if self.request.method == 'POST':
+            context['medico'] = Medico.objects.get(user = self.request.user)
         return context
 
 class ProntuarioObjectView(generics.RetrieveUpdateDestroyAPIView):
