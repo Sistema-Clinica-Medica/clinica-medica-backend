@@ -4,9 +4,12 @@ from django.contrib.auth.models import User
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only = True)
+    name = serializers.SerializerMethodField()
     class Meta:
         model = User
-        fields = ('username', 'email', 'password')
+        fields = ('username', 'email', 'password', 'name')
+    def get_name(self, obj):
+        return obj.get_full_name()
 
 
 class PacienteSerializer(serializers.ModelSerializer):
@@ -58,7 +61,6 @@ class MedicoSerializer(serializers.ModelSerializer):
         return medico
 
 class ProntuarioSerializer(serializers.ModelSerializer):
-    paciente = PacienteSerializer()	
     class Meta:
         model = Prontuario
         fields = ('id','paciente','birthday','sex', 'address', 'city', 'state', 'zip_code', 'description', 'allergies','medico')
@@ -67,6 +69,10 @@ class ProntuarioSerializer(serializers.ModelSerializer):
         medico = self.context['medico']
         validated_data['medico'] = medico
         return super().create(validated_data)
+    def to_representation(self, instance):
+        representation =  super().to_representation(instance)
+        representation['paciente'] = PacienteSerializer(instance.paciente).data
+        return representation
 
 class DiagnosticoSerializer(serializers.ModelSerializer):
     class Meta:

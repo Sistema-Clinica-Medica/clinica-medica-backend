@@ -24,7 +24,7 @@ class ProntuarioList(generics.ListCreateAPIView):
     def get_serializer_context(self):
         context = super().get_serializer_context()
         if self.request.method == 'POST':
-            context['medico'] = Medico.objects.get(user = self.request.user)
+            context['medico'] = Medico.objects.last()
         return context
 
 class ProntuarioObjectView(generics.RetrieveUpdateDestroyAPIView):
@@ -55,6 +55,8 @@ class LoginView(APIView):
         if user is None:
             return Response({'status': 'error', 'message': 'Usuário não encontrado'}, status=404)
         if user.check_password(password):
+            token = Token.objects.filter(user = request.user)
+            token.delete()
             return Response({'status': 'success', 'token': Token.objects.create(user = user).key})
         else:
             return Response({'status': 'error', 'message': 'Senha incorreta'}, status=403)
