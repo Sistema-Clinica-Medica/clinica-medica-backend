@@ -77,7 +77,7 @@ class ProntuarioSerializer(serializers.ModelSerializer):
 class DiagnosticoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Diagnostico
-        fields = ('prontuario','description','date','medico')
+        fields = ('prontuario','description','date','medico','id')
         read_only_fields = ('date','medico')
     def create(self, validated_data):
         medico = self.context['medico']
