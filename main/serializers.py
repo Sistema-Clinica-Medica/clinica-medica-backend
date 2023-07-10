@@ -26,7 +26,7 @@ class PacienteSerializer(serializers.ModelSerializer):
         else:
             raise serializers.ValidationError(user.errors)
         paciente = Paciente.objects.create(user = user)
-        return paciente   
+        return paciente  
 
 class RecepcionistaSerializer(serializers.ModelSerializer):
     user = UserSerializer()
@@ -83,4 +83,8 @@ class DiagnosticoSerializer(serializers.ModelSerializer):
         medico = self.context['medico']
         validated_data['medico'] = medico
         return super().create(validated_data)
+    def to_representation(self, instance):
+        representation =  super().to_representation(instance)
+        representation['prontuario'] = ProntuarioSerializer(instance.prontuario).data
+        return representation
 
