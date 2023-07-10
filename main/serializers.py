@@ -16,7 +16,7 @@ class PacienteSerializer(serializers.ModelSerializer):
     user = UserSerializer()
     class Meta:
         model = Paciente
-        fields = ('user',)
+        fields = ('user','id')
     def create(self, validated_data):
         user = UserSerializer(data = validated_data['user'])
         if user.is_valid():
