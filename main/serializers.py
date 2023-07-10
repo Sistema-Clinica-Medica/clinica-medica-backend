@@ -86,5 +86,6 @@ class DiagnosticoSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         representation =  super().to_representation(instance)
         representation['prontuario'] = ProntuarioSerializer(instance.prontuario).data
+        representation['medico'] = MedicoSerializer(instance.medico).data
         return representation
 
